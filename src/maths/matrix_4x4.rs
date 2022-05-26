@@ -104,8 +104,8 @@ impl Matrix4x4 {
         matrix
     }
 
-    pub fn transform<T: Transformable>(&self, t: &T) -> T {
-        t.transform(&self)
+    pub fn transform<T: Transformable>(&self, t: &T, translate: bool) -> T {
+        t.transform(&self, translate)
     }
 }
 
@@ -117,16 +117,5 @@ mod tests {
     fn index() {
         let result = Matrix4x4::identity()[(0, 0)];
         assert_eq!(result, 1.0)
-    }
-
-    #[test]
-    fn create_frame_transform() {
-        let origin = Vector3 (1.0, 0.0, 0.0);
-        let i_basis = Vector3 (2.0, 0.0, 0.0);
-        let j_basis = Vector3 (0.0, 1.0, 0.0);
-        let m = Matrix4x4::create_frame_transform(origin, i_basis, j_basis);
-        let a = Vector3 (1.0, 1.0, 1.0);
-        let result = m.transform(&a);
-        assert_eq!(result, Vector3 (2.0, 1.0, 1.0))
     }
 }

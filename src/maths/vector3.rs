@@ -1,6 +1,7 @@
 use std::ops::*;
 use crate::traits::Transformable;
 use crate::maths::Matrix4x4;
+use rand::random;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vector3 (pub f64, pub f64, pub f64);
@@ -59,7 +60,14 @@ impl Div<Vector3> for Vector3 {
 impl Div<f64> for Vector3 {
     type Output = Vector3;
     fn div(self, scalar: f64) -> Self::Output {
-        Vector3 (self.0 / scalar, self.1 / scalar, self.2 / scalar)
+        self * (1.0 / scalar)
+    }
+}
+
+impl Div<Vector3> for f64 {
+    type Output = Vector3;
+    fn div(self, v: Vector3) -> Self::Output {
+        Vector3 (self / v.0, self / v.1, self / v.2)
     }
 }
 
@@ -76,12 +84,12 @@ impl Index<usize> for Vector3 {
 }
 
 impl Transformable for Vector3 {
-    fn transform(&self, frame: &Matrix4x4) -> Self {
-        let w = self.0 * frame[(3, 0)] + self.1 * frame[(3, 1)] + self.2 * frame[(3, 2)] + 1.0 * frame[(3, 3)];
+    fn transform(&self, frame: &Matrix4x4, translate: bool) -> Self {
+        let w: f64 = if translate { 1.0 } else { 0.0 };
         return Vector3 (
-            (self.0 * frame[(0, 0)] + self.1 * frame[(0, 1)] + self.2 * frame[(0, 2)] + 1.0 * frame[(0, 3)]) / w,
-            (self.0 * frame[(1, 0)] + self.1 * frame[(1, 1)] + self.2 * frame[(1, 2)] + 1.0 * frame[(1, 3)]) / w,
-            (self.0 * frame[(2, 0)] + self.1 * frame[(2, 1)] + self.2 * frame[(2, 2)] + 1.0 * frame[(2, 3)]) / w
+            self.0 * frame[(0, 0)] + self.1 * frame[(0, 1)] + self.2 * frame[(0, 2)] + w * frame[(0, 3)],
+            self.0 * frame[(1, 0)] + self.1 * frame[(1, 1)] + self.2 * frame[(1, 2)] + w * frame[(1, 3)],
+            self.0 * frame[(2, 0)] + self.1 * frame[(2, 1)] + self.2 * frame[(2, 2)] + w * frame[(2, 3)]
         );
     }
 }
@@ -111,6 +119,19 @@ impl Vector3 {
 
     pub fn normalise(self) -> Vector3 {
         self * (1.0 / self.magnitude())
+    }
+
+    pub fn reflect(&self, normal: Vector3) -> Vector3 {
+        *self - 2.0 * (normal * *self) * normal
+    }
+
+    pub fn random_unit() -> Vector3 {
+        let mut v;
+        while {
+            v = Vector3(random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0);
+            v.square_magnitude() > 1.0
+        } {}
+        v.normalise()
     }
 }
 

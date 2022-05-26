@@ -3,7 +3,7 @@ use fe_o::cameras::PerspectiveCamera;
 use fe_o::maths::Matrix4x4;
 use core::f64::consts::PI;
 use fe_o::shapes::*;
-use fe_o::materials::*;
+use fe_o::materials as M;
 use fe_o::data_structures::Scene;
 use fe_o::data_structures::Color;
 use fe_o::Renderer;
@@ -13,9 +13,9 @@ use fe_o::traits::RenderObject;
 fn main() {
 
     let materials: Vec<Box<dyn Material>> = vec![
-        Box::new(DiffuseMaterial::new(Color (0.5, 0.5, 0.5, 1.0), 0.0)),
-        Box::new(DiffuseMaterial::new(Color (0.2, 0.2, 0.9, 1.0), 0.0)),
-        Box::new(DiffuseMaterial::new(Color (0.9, 0.2, 0.2, 1.0), 0.1))
+        Box::new(M::Lambertian::new(Color (0.5, 0.5, 0.5, 1.0), 0.0)),
+        Box::new(M::Lambertian::new(Color (0.2, 0.2, 0.9, 1.0), 0.0)),
+        Box::new(M::Lambertian::new(Color (0.9, 0.2, 0.2, 1.0), 0.1))
     ];
 
     let render_objects: Vec<Box<dyn RenderObject>> = vec![

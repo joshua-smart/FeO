@@ -2,12 +2,12 @@ use crate::data_structures::Color;
 use crate::traits::Material;
 use crate::maths::Vector3;
 
-pub struct DiffuseMaterial {
+pub struct Lambertian {
     albedo: Color,
     emmissivity: f64
 }
 
-impl Material for DiffuseMaterial {
+impl Material for Lambertian {
     fn transmission(&self, normal: Vector3, incoming_direction: Vector3, outgoing_direction: Vector3) -> Color {
         self.albedo * self.brdf(normal, incoming_direction, outgoing_direction)
     }
@@ -25,8 +25,8 @@ impl Material for DiffuseMaterial {
     }
 }
 
-impl DiffuseMaterial {
-    pub fn new(albedo: Color, emmissivity: f64) -> DiffuseMaterial {
-        DiffuseMaterial { albedo, emmissivity }
+impl Lambertian {
+    pub fn new(albedo: Color, emmissivity: f64) -> Lambertian {
+        Lambertian { albedo, emmissivity }
     }
 }

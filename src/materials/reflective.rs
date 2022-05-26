@@ -2,11 +2,11 @@ use crate::traits::Material;
 use crate::data_structures::Color;
 use crate::maths::Vector3;
 
-pub struct ReflectiveMaterial {
+pub struct Reflective {
     reflectance: f64
 }
 
-impl Material for ReflectiveMaterial {
+impl Material for Reflective {
     fn emmission(&self) -> Color {
         Color (0.0, 0.0, 0.0, 1.0)
     }
@@ -25,8 +25,8 @@ impl Material for ReflectiveMaterial {
 
 }
 
-impl ReflectiveMaterial {
-    pub fn new(reflectance: f64) -> ReflectiveMaterial {
-        ReflectiveMaterial { reflectance }
+impl Reflective{
+    pub fn new(reflectance: f64) -> Reflective{
+        Reflective{ reflectance }
     }
 }

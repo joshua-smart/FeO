@@ -8,3 +8,4 @@ pub use image::Image;
 pub use color::Color;
 pub use ray::Ray;
 pub use intersection_payload::IntersectionPayload;
+pub use scene::Scene;

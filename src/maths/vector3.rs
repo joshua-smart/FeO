@@ -128,10 +128,19 @@ impl Vector3 {
     pub fn random_unit() -> Vector3 {
         let mut v;
         while {
-            v = Vector3(random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0);
+            v = Vector3 (random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0);
             v.square_magnitude() > 1.0
         } {}
         v.normalise()
+    }
+
+    pub fn random_in_unit_disk() -> Vector3 {
+        let mut v;
+        while {
+            v = Vector3(random::<f64>() * 2.0 - 1.0, random::<f64>() * 2.0 - 1.0, 0.0);
+            v.square_magnitude() > 1.0
+        } {}
+        v
     }
 }
 

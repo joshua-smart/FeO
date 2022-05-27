@@ -19,21 +19,21 @@ impl Scene {
     }
 
     fn trace(&self, ray: Ray, depth: usize) -> Color {
-        if depth >= self.max_depth { self.background_color } else {
-            let payload = self.bounding_volume_hierarchy.intersect(&ray);
-            match payload {
-                None => self.background_color,
-                Some(payload) => {
-                    let material = &self.materials[payload.material_id];
-                    let outgoing_direction = material.generate_direction(payload.normal, ray.direction);
-                    let outgoing_ray = Ray { origin: payload.position, direction: outgoing_direction };
+        if depth >= self.max_depth { return self.background_color; }
 
-                    let light_sampled = self.trace(outgoing_ray, depth + 1);
-                    let light_emmited = material.emmission();
-                    let light_transmitted = material.transmission(payload.normal, ray.direction, outgoing_direction);
+        let payload_option = self.bounding_volume_hierarchy.intersect(&ray);
+        match payload_option {
+            None => self.background_color,
+            Some(payload) => {
+                let material = &self.materials[payload.material_id];
+                let outgoing_direction = material.generate_direction(payload.normal, ray.direction);
+                let outgoing_ray = Ray { origin: payload.position, direction: outgoing_direction };
 
-                    light_sampled * light_transmitted + light_emmited
-                }
+                let light_sampled = self.trace(outgoing_ray, depth + 1);
+                let light_emmited = material.emmission(&payload);
+                let light_transmitted = material.transmission(&payload, ray.direction, outgoing_direction);
+
+                light_sampled * light_transmitted + light_emmited
             }
         }
     }

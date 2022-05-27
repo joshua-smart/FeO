@@ -19,7 +19,7 @@ impl RenderObject for Plane {
         if distance <= 0.0 { return None; }
 
         let position = ray.at(distance);
-        Some(IntersectionPayload { position, distance, normal: self.normal.clone(), material_id: self.material_id })
+        Some(IntersectionPayload { position, distance, normal: self.normal.clone(), material_id: self.material_id, u: 0.0, v: 0.0 })
     }
 
     fn bounds(&self) -> Bounds {

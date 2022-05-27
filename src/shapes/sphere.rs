@@ -3,6 +3,7 @@ use crate::maths::Vector3;
 use crate::data_structures::Ray;
 use crate::data_structures::IntersectionPayload;
 use crate::shapes::Bounds;
+use core::f64::consts::PI;
 
 #[derive(Debug)]
 pub struct Sphere {
@@ -19,9 +20,16 @@ impl RenderObject for Sphere {
         let distance = -(ray.direction * (ray.origin - self.center)) - discriminant.sqrt();
         if distance <= 0.0 { return None; }
 
-        let normal = (ray.at(distance) - self.center).normalise();
+        let normal = (ray.at(distance) - self.center) / self.radius;
         let position = ray.at(distance);
-        Some(IntersectionPayload { position, distance, normal, material_id: self.material_id })
+
+        let theta = f64::acos(-normal.1);
+        let phi = f64::atan2(-normal.2, normal.0 + PI);
+
+        let u = phi / (2.0 * PI);
+        let v = theta / PI;
+
+        Some(IntersectionPayload { position, distance, normal, material_id: self.material_id, u, v })
     }
 
     fn bounds(&self) -> Bounds {

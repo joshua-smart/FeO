@@ -32,7 +32,7 @@ impl RenderObject for Triangle {
         let test_ca = n * Vector3::cross(&(self.a - self.c), &(p - self.c));
 
         if test_ab < 0.0 || test_cb < 0.0 || test_ca < 0.0 { return None; }
-        Some(IntersectionPayload { position: p, distance: t, normal: self.normal, material_id: self.material_id })
+        Some(IntersectionPayload { position: p, distance: t, normal: self.normal, material_id: self.material_id, u: 0.0, v: 0.0 })
     }
 
     fn bounds(&self) -> Bounds {

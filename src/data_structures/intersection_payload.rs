@@ -5,4 +5,6 @@ pub struct IntersectionPayload {
     pub distance: f64,
     pub normal: Vector3,
     pub material_id: usize,
+    pub u: f64,
+    pub v: f64
 }

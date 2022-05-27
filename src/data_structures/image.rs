@@ -40,6 +40,9 @@ impl Image {
         bytes[0x12..0x16].copy_from_slice(&(self.width as u32).to_le_bytes());
         bytes[0x16..0x1A].copy_from_slice(&(self.height as u32).to_le_bytes());
 
+        // Preallocate memory to optimise allocations
+        bytes.reserve_exact(self.width * self.height * 3);
+
         // Write the pixel data to the file in the right order
         for row in self.pixels.chunks(self.width).rev() {
             for pixel in row {

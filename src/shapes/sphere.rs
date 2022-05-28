@@ -23,8 +23,8 @@ impl RenderObject for Sphere {
         let normal = (ray.at(distance) - self.center) / self.radius;
         let position = ray.at(distance);
 
-        let theta = f64::acos(-normal.1);
-        let phi = f64::atan2(-normal.2, normal.0 + PI);
+        let theta = f64::acos(-normal.2);
+        let phi = f64::atan2(-normal.1, normal.0);
 
         let u = phi / (2.0 * PI);
         let v = theta / PI;

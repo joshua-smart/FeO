@@ -46,9 +46,9 @@ impl Image {
         // Write the pixel data to the file in the right order
         for row in self.pixels.chunks(self.width).rev() {
             for pixel in row {
-                bytes.push(((pixel & 0xff000000) >> 24) as u8);
-                bytes.push(((pixel & 0x00ff0000) >> 16) as u8);
                 bytes.push(((pixel & 0x0000ff00) >> 8) as u8);
+                bytes.push(((pixel & 0x00ff0000) >> 16) as u8);
+                bytes.push(((pixel & 0xff000000) >> 24) as u8);
             }
         }
 

@@ -23,8 +23,9 @@ impl BVH {
                 if !bounds.intersect(ray) { return None; }
                 match (left.intersect(ray), right.intersect(ray)) {
                     (None, None) => None,
-                    (Some(payload), None) => Some(payload),
-                    (None, Some(payload)) => Some(payload),
+                    (Some(payload), None) | (None, Some(payload)) => {
+                        if payload.distance > 1e-3 { Some(payload) } else { None }
+                    },
                     (Some(payload_a), Some(payload_b)) => {
                         if payload_a.distance < payload_b.distance { return Some(payload_a); }
                         Some(payload_b)

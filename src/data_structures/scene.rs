@@ -19,7 +19,7 @@ impl Scene {
     }
 
     fn trace(&self, ray: Ray, depth: usize) -> Color {
-        if depth >= self.max_depth { return self.background_color; }
+        if depth >= self.max_depth { return Color (0.0, 0.0, 0.0, 1.0); }
 
         let payload_option = self.bounding_volume_hierarchy.intersect(&ray);
         match payload_option {
@@ -37,27 +37,6 @@ impl Scene {
             }
         }
     }
-
-//    fn get_closest_intersect(&self, ray: Ray) -> Option<IntersectionPayload> {
-//        let mut record_payload = None;
-//        let mut record_distance = f64::INFINITY;
-//
-//        for i in 0..self.render_objects.len() {
-//            let render_object = &self.render_objects[i];
-//            if !render_object.bounding_box().intersect(&ray) { continue }
-//            match render_object.intersect(&ray) {
-//                None => (),
-//                Some(payload) => {
-//                    if payload.distance > 1e-3 && payload.distance < record_distance {
-//                        record_distance = payload.distance;
-//                        record_payload = Some(payload);
-//                    }
-//                }
-//            }
-//        }
-//
-//        record_payload
-//    }
 
     pub fn new(render_objects: Vec<Box<dyn RenderObject>>, materials: Vec<Box<dyn Material>>, background_color: Color, max_depth: usize) -> Scene {
         let bounding_volume_hierarchy = BVH::new(render_objects);

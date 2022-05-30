@@ -9,7 +9,7 @@ pub struct Renderer<C: Camera>{
     camera: C
 }
 
-impl<C: 'static + Camera> Renderer<C> {
+impl<C: Camera> Renderer<C> {
     pub fn new(scene: Scene, camera: C) -> Renderer<C> {
         Renderer { scene, camera }
     }
@@ -31,6 +31,7 @@ impl<C: 'static + Camera> Renderer<C> {
             }
             let progress = ((y as f64 / image.height as f64) * 100.0) as usize;
             print!("\r[{}{}] {}%", "#".repeat(progress), "-".repeat(100 - progress), progress)
+
         }
         print!("\n");
         image

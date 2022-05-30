@@ -7,6 +7,7 @@ static BMP_HEADER: [u8; 54] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
+#[derive(Clone)]
 pub struct Image {
     pixels: Vec<u32>,
     pub width: usize,
@@ -59,6 +60,21 @@ impl Image {
         // Write to disk
         let mut file = File::create(filepath).unwrap();
         file.write_all(&bytes).unwrap();
+    }
+
+    pub fn blend(images: Vec<Image>, width: usize, height: usize) -> Image {
+        let mut image = Image::new(width, height);
+
+        for y in 0..height {
+            for x in 0..width {
+                let mut color = Color (0.0, 0.0, 0.0, 1.0);
+                for input_image in &images {
+                    color = color + input_image.get_pixel(x, y);
+                }
+                image.set_pixel(x, y, &(color / images.len() as f64));
+            }
+        }
+        image
     }
 }
 

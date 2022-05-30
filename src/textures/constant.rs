@@ -14,7 +14,7 @@ impl Texture for Constant {
 }
 
 impl Constant {
-    pub fn new(color: Color) -> Constant {
-        Constant { color }
+    pub fn new(color: Color) -> Box<Constant> {
+        Box::new(Constant { color })
     }
 }

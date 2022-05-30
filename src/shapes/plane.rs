@@ -34,10 +34,10 @@ impl RenderObject for Plane {
 }
 
 impl Plane {
-    pub fn new(position: Vector3, normal: Vector3, material_id: usize) -> Plane {
+    pub fn new(position: Vector3, normal: Vector3, material_id: usize) -> Box<Plane> {
         let unit_normal = normal.normalise();
         let b_basis = Vector3::cross(&unit_normal, &Vector3 (1.0, 0.0, 0.0)).normalise();
         let a_basis = Vector3::cross(&b_basis, &unit_normal);
-        Plane { position, normal: unit_normal, a_basis, b_basis, material_id }
+        Box::new(Plane { position, normal: unit_normal, a_basis, b_basis, material_id })
     }
 }

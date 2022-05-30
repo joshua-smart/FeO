@@ -14,7 +14,7 @@ impl Texture for Checked {
 }
 
 impl Checked {
-    pub fn new(color_a: Color, color_b: Color) -> Checked {
-        Checked { color_a, color_b }
+    pub fn new(color_a: Color, color_b: Color) -> Box<Checked> {
+        Box::new(Checked { color_a, color_b })
     }
 }

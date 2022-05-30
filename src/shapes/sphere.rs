@@ -39,7 +39,7 @@ impl RenderObject for Sphere {
 }
 
 impl Sphere {
-    pub fn new(center: Vector3, radius: f64, material_id: usize) -> Sphere {
-        Sphere { center, radius, material_id }
+    pub fn new(center: Vector3, radius: f64, material_id: usize) -> Box<Sphere> {
+        Box::new(Sphere { center, radius, material_id })
     }
 }

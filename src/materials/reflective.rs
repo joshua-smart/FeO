@@ -21,13 +21,13 @@ impl Material for Reflective {
     }
 
     fn generate_direction(&self, normal: Vector3, incoming_direction: Vector3) -> Vector3 {
-        incoming_direction.reflect(normal) + Vector3::random_unit() * self.reflectance
+        (incoming_direction.reflect(normal) + Vector3::random_unit() * self.reflectance).normalise()
     }
 
 }
 
 impl Reflective{
-    pub fn new(reflectance: f64) -> Reflective{
-        Reflective{ reflectance }
+    pub fn new(reflectance: f64) -> Box<Reflective> {
+        Box::new(Reflective{ reflectance })
     }
 }

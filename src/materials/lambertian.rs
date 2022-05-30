@@ -22,13 +22,13 @@ impl Material for Lambertian {
         self.albedo.value(payload.u, payload.v, payload.position) * self.emmissivity
     }
 
-    fn generate_direction(&self, normal: Vector3, _incoming_direction: Vector3) -> Vector3 {
-        normal + Vector3::random_unit()
+    fn generate_direction(&self, normal: Vector3, incoming_direction: Vector3) -> Vector3 {
+        (-1.0 * normal * (normal * incoming_direction).signum() + Vector3::random_unit()).normalise()
     }
 }
 
 impl Lambertian {
-    pub fn new(albedo: Box<dyn Texture>, emmissivity: f64) -> Lambertian {
-        Lambertian { albedo, emmissivity }
+    pub fn new(albedo: Box<dyn Texture>, emmissivity: f64) -> Box<Lambertian> {
+        Box::new(Lambertian { albedo, emmissivity })
     }
 }

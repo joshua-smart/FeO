@@ -2,10 +2,10 @@ use crate::traits::RenderObject;
 use crate::data_structures::Color;
 use crate::data_structures::Ray;
 use crate::traits::Material;
-use crate::pdfs::RenderObjectPDF;
-use crate::pdfs::MixturePDF;
-use crate::traits::PDF;
-use crate::pdfs::CosinePDF;
+use crate::samplers::RenderObjectSampler;
+use crate::samplers::MixtureSampler;
+use crate::traits::Sampler;
+use crate::samplers::CosineSampler;
 use crate::data_structures::IntersectionPayload;
 
 pub struct Scene {
@@ -33,8 +33,8 @@ impl Scene {
                 let material = &self.materials[payload.material_id];
                 let light_emmited = material.emmission(&payload);
 
-                let pdf_a = RenderObjectPDF::new(payload.position, &self.lights[0]);
-                let pdf_b = CosinePDF::new(payload.normal);
+                let pdf_a = RenderObjectSampler::new(payload.position, &self.lights[0]);
+                let pdf_b = CosineSampler::new(payload.normal);
                 let mix_pdf = pdf_a; // MixturePDF::new(&pdf_a, &pdf_b);
 
                 let outgoing_direction = mix_pdf.generate();

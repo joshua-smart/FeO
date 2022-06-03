@@ -1,14 +1,14 @@
-use crate::traits::PDF;
+use crate::traits::Sampler;
 use crate::traits::RenderObject;
 use crate::maths::Vector3;
 use crate::data_structures::Ray;
 
-pub struct RenderObjectPDF<'a> {
+pub struct RenderObjectSampler<'a> {
     origin: Vector3,
     render_object: &'a Box<dyn RenderObject>
 }
 
-impl PDF for RenderObjectPDF<'_> {
+impl Sampler for RenderObjectSampler<'_> {
     fn value(&self, direction: Vector3) -> f64 {
         self.render_object.pdf_value(Ray::new(self.origin, direction))
     }
@@ -18,8 +18,8 @@ impl PDF for RenderObjectPDF<'_> {
     }
 }
 
-impl RenderObjectPDF<'_> {
-    pub fn new(origin: Vector3, render_object: &Box<dyn RenderObject>) -> RenderObjectPDF {
-        RenderObjectPDF { origin, render_object }
+impl RenderObjectSampler<'_> {
+    pub fn new(origin: Vector3, render_object: &Box<dyn RenderObject>) -> RenderObjectSampler {
+        RenderObjectSampler { origin, render_object }
     }
 }

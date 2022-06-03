@@ -5,7 +5,7 @@ use crate::data_structures::IntersectionPayload;
 use std::f64::consts::PI;
 use crate::data_structures::Color;
 use crate::data_structures::ScatterPayload;
-use crate::pdfs::CosinePDF;
+use crate::samplers::CosineSampler;
 
 pub struct Lambertian {
     pub albedo: Box<dyn Texture>,
@@ -20,7 +20,7 @@ impl Material for Lambertian {
 
     fn scatter(&self, payload: &IntersectionPayload, _incoming_direction: Vector3) -> Option<ScatterPayload> {
         let attenuation = self.albedo.value(payload.u, payload.v, payload.position);
-        let pdf = CosinePDF::new(payload.normal);
+        let pdf = CosineSampler::new(payload.normal);
         Some(ScatterPayload { is_specular: false, attenuation, pdf: Box::new(pdf) })
     }
 

@@ -2,7 +2,7 @@ use core::f64::consts::PI;
 use fe_o::cameras::PerspectiveCamera;
 use fe_o::data_structures::Color;
 use fe_o::data_structures::Scene;
-use fe_o::materials as M;
+use fe_o::materials::*;
 use fe_o::maths::Matrix4x4;
 use fe_o::maths::Vector3;
 use fe_o::shapes as S;
@@ -18,10 +18,10 @@ fn main() {
     let t_green = ConstantTexture::new(Color (0.12, 0.45, 0.15, 1.0));
     let t_light = ConstantTexture::new(Color (1.0, 1.0, 1.0, 1.0));
 
-    let m_red = M::Lambertian::new(t_red, 0.0);
-    let m_white = M::Lambertian::new(t_white, 0.0);
-    let m_green = M::Lambertian::new(t_green, 0.0);
-    let m_light = M::Lambertian::new(t_light, 15.0);
+    let m_red = LambertianMaterial::new(t_red, 0.0);
+    let m_white = LambertianMaterial::new(t_white, 0.0);
+    let m_green = LambertianMaterial::new(t_green, 0.0);
+    let m_light = LambertianMaterial::new(t_light, 15.0);
     let materials: Vec<Box<dyn Material>> = vec![m_red, m_white, m_green, m_light];
 
     let render_objects: Vec<Box<dyn RenderObject>> = vec![

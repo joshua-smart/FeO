@@ -7,12 +7,12 @@ use crate::data_structures::Color;
 use crate::data_structures::ScatterPayload;
 use crate::samplers::CosineSampler;
 
-pub struct Lambertian {
+pub struct LambertianMaterial {
     pub albedo: Box<dyn Texture>,
     pub emmissivity: f64
 }
 
-impl Material for Lambertian {
+impl Material for LambertianMaterial {
     fn scattering_pdf(&self, payload: &IntersectionPayload, _incoming_direction: Vector3, outgoing_direction: Vector3) -> f64 {
         let cosine = payload.normal * outgoing_direction;
         if cosine < 0.0 { 0.0 } else { cosine / PI }
@@ -33,8 +33,8 @@ impl Material for Lambertian {
     }
 }
 
-impl Lambertian {
-    pub fn new(albedo: Box<dyn Texture>, emmissivity: f64) -> Box<Lambertian> {
-        Box::new(Lambertian { albedo, emmissivity })
+impl LambertianMaterial {
+    pub fn new(albedo: Box<dyn Texture>, emmissivity: f64) -> Box<LambertianMaterial> {
+        Box::new(LambertianMaterial { albedo, emmissivity })
     }
 }

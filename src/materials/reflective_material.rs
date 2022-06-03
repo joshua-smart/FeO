@@ -3,11 +3,11 @@ use crate::data_structures::Color;
 use crate::maths::Vector3;
 use crate::data_structures::IntersectionPayload;
 
-pub struct Reflective {
+pub struct ReflectiveMaterial {
     reflectance: f64
 }
 
-impl Material for Reflective {
+impl Material for ReflectiveMaterial {
     fn emmission(&self, _payload: &IntersectionPayload) -> Color {
         Color (0.0, 0.0, 0.0, 1.0)
     }
@@ -27,7 +27,7 @@ impl Material for Reflective {
 }
 
 impl Reflective{
-    pub fn new(reflectance: f64) -> Box<Reflective> {
-        Box::new(Reflective{ reflectance })
+    pub fn new(reflectance: f64) -> Box<ReflectiveMaterial> {
+        Box::new(ReflectiveMaterial { reflectance })
     }
 }

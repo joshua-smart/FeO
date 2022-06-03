@@ -6,6 +6,7 @@ pub mod cameras;
 pub mod materials;
 pub mod textures;
 pub mod pdfs;
+pub mod acceleration_structures;
 mod renderer;
 
 pub use renderer::Renderer;

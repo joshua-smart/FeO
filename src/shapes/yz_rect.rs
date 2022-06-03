@@ -3,6 +3,7 @@ use crate::data_structures::Ray;
 use crate::data_structures::IntersectionPayload;
 use crate::maths::Vector3;
 use crate::shapes::Bounds;
+use rand::random;
 
 pub struct YZRect {
     y0: f64,
@@ -29,6 +30,28 @@ impl RenderObject for YZRect {
 
     fn bounds(&self) -> Bounds {
         Bounds::BoundingBox(Vector3 (self.x - 1e-5, self.y0, self.z0), Vector3 (self.x + 1e-5, self.y1, self.z1))
+    }
+
+    fn pdf_value(&self, ray: Ray) -> f64 {
+        match self.intersect(&ray) {
+            None => 0.0,
+            Some(payload) => {
+                let area = (self.y1 - self.y0) * (self.z1 - self.z0);
+                let square_distance = payload.distance.powi(2);
+                let cosine = (ray.direction * payload.normal).abs();
+
+                if cosine == 0.0 { return 0.0; }
+
+                square_distance / (cosine * area)
+            }
+        }
+    }
+
+    fn random(&self, origin: Vector3) -> Vector3 {
+        let y = random::<f64>() * (self.y1 - self.y0) + self.y0;
+        let z = random::<f64>() * (self.z1 - self.z0) + self.z0;
+
+        (Vector3 (self.x, y, z) - origin).normalise()
     }
 }
 

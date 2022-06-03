@@ -1,29 +1,35 @@
-use crate::data_structures::Color;
 use crate::traits::Material;
 use crate::maths::Vector3;
 use crate::traits::Texture;
 use crate::data_structures::IntersectionPayload;
+use std::f64::consts::PI;
+use crate::data_structures::Color;
+use crate::data_structures::ScatterPayload;
+use crate::pdfs::CosinePDF;
 
 pub struct Lambertian {
-    albedo: Box<dyn Texture>,
-    emmissivity: f64
+    pub albedo: Box<dyn Texture>,
+    pub emmissivity: f64
 }
 
 impl Material for Lambertian {
-    fn transmission(&self, payload: &IntersectionPayload, incoming_direction: Vector3, outgoing_direction: Vector3) -> Color {
-        self.albedo.value(payload.u, payload.v, payload.position) * self.brdf(payload.normal, incoming_direction, outgoing_direction)
+    fn scattering_pdf(&self, payload: &IntersectionPayload, _incoming_direction: Vector3, outgoing_direction: Vector3) -> f64 {
+        let cosine = payload.normal * outgoing_direction;
+        if cosine < 0.0 { 0.0 } else { cosine / PI }
     }
 
-    fn brdf(&self, _normal: Vector3, _incoming_direction: Vector3, _outgoing_direction: Vector3) -> f64 {
-        1.0
+    fn scatter(&self, payload: &IntersectionPayload, _incoming_direction: Vector3) -> Option<ScatterPayload> {
+        let attenuation = self.albedo.value(payload.u, payload.v, payload.position);
+        let pdf = CosinePDF::new(payload.normal);
+        Some(ScatterPayload { is_specular: false, attenuation, pdf: Box::new(pdf) })
     }
 
     fn emmission(&self, payload: &IntersectionPayload) -> Color {
         self.albedo.value(payload.u, payload.v, payload.position) * self.emmissivity
     }
 
-    fn generate_direction(&self, normal: Vector3, incoming_direction: Vector3) -> Vector3 {
-        (-1.0 * normal * (normal * incoming_direction).signum() + Vector3::random_unit()).normalise()
+    fn transmission(&self, payload: &IntersectionPayload, incoming_direction: Vector3, outgoing_direction: Vector3) -> Color {
+        self.albedo.value(payload.u, payload.v, payload.position) * self.scattering_pdf(payload, incoming_direction, outgoing_direction)
     }
 }
 

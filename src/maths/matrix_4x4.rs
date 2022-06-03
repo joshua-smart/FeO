@@ -87,6 +87,18 @@ impl Matrix4x4 {
         Matrix4x4::new([1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0])
     }
 
+    pub fn from_basis(i: Vector3, j: Vector3, k: Vector3) -> Matrix4x4 {
+        let basis = [i, j, k];
+        let mut matrix = Matrix4x4::identity();
+        for i in 0..3 {
+            let v = basis[i];
+            for j in 0..3 {
+                matrix[(j, i)] = v[j];
+            }
+        }
+        matrix
+    }
+
     // create a matrix representing an normalised orthoganal basis with a specific origin, 
     // preserves direction of the supplied i_basis parameter
     pub fn create_frame_transform(origin: Vector3, i_basis: Vector3, j_basis: Vector3) -> Matrix4x4 {
@@ -107,6 +119,14 @@ impl Matrix4x4 {
     pub fn transform<T: Transformable>(&self, t: &T, translate: bool) -> T {
         t.transform(&self, translate)
     }
+
+    pub fn from_i_basis(i_basis: Vector3) -> Matrix4x4 {
+        let j_temp = if i_basis != Vector3 (0.0, 1.0, 0.0) { Vector3 (0.0, 1.0, 0.0) } else { Vector3 (-1.0, 0.0, 0.0) };
+        let k_basis = Vector3::cross(&i_basis, &j_temp).normalise();
+        let j_basis = Vector3::cross(&k_basis, &i_basis);
+
+        Matrix4x4::from_basis(i_basis, j_basis, k_basis)
+    }
 }
 
 #[cfg(test)]
@@ -117,5 +137,24 @@ mod tests {
     fn index() {
         let result = Matrix4x4::identity()[(0, 0)];
         assert_eq!(result, 1.0)
+    }
+
+    #[test]
+    fn from_i_basis() {
+        let i_basis = Vector3 (1.0, 0.0, 0.0);
+        let result = Matrix4x4::from_i_basis(i_basis);
+        assert_eq!(result, Matrix4x4::identity());
+
+        let i2_basis = Vector3 (0.0, 1.0, 0.0);
+        let result = Matrix4x4::from_i_basis(i2_basis);
+        
+        assert_eq!(result.transform(&Vector3 (1.0, 0.0, 0.0), false), Vector3 (0.0, 1.0, 0.0));
+        assert_eq!(result.transform(&Vector3 (0.0, 1.0, 0.0), false), Vector3 (-1.0, 0.0, 0.0));
+        assert_eq!(result.transform(&Vector3 (0.0, 0.0, 1.0), false), Vector3 (0.0, 0.0, 1.0));
+
+        let i3_basis = Vector3 (1.0, 1.0, 0.0).normalise();
+        let result = Matrix4x4::from_i_basis(i3_basis);
+
+        assert_eq!(result.transform(&Vector3 (1.0, 0.0, 0.0), false), i3_basis);
     }
 }

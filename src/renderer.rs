@@ -15,7 +15,7 @@ impl<C: Camera> Renderer<C> {
     }
 
     pub fn render(self, image_width: usize, image_height: usize) -> Image {
-        let samples = 8;
+        let samples = 16;
 
         let mut image = Image::new(image_width, image_height);
 
@@ -29,7 +29,7 @@ impl<C: Camera> Renderer<C> {
                 }
                 image.set_pixel(x, y, &(color / samples as f64));
             }
-            let progress = ((y as f64 / image.height as f64) * 100.0) as usize;
+            let progress = ((y as f64 / (image.height as f64 - 1.0)) * 100.0) as usize;
             print!("\r[{}{}] {}%", "#".repeat(progress), "-".repeat(100 - progress), progress)
 
         }

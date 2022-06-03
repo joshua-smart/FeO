@@ -2,6 +2,7 @@ use std::ops::*;
 use crate::traits::Transformable;
 use crate::maths::Matrix4x4;
 use rand::random;
+use std::f64::consts::PI;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vector3 (pub f64, pub f64, pub f64);
@@ -142,6 +143,18 @@ impl Vector3 {
         } {}
         v
     }
+
+    pub fn random_cosine_direction() -> Vector3 {
+        let r1 = random::<f64>();
+        let r2 = random::<f64>();
+        let x = (1.0 - r2).sqrt();
+
+        let phi = 2.0 * PI * r1;
+        let y = phi.cos() * r2.sqrt();
+        let z = phi.sin() * r2.sqrt();
+
+        Vector3 (x, y, z)
+    }
 }
 
 #[cfg(test)]
@@ -193,5 +206,13 @@ mod tests {
     fn normalise() {
         let result = vector_a().normalise();
         assert!((1.0 - result.magnitude()).abs() < 1e-10)
+    }
+    #[test]
+    fn random_cosine_direction() {
+        for _ in 0..10 {
+            let result = Vector3::random_cosine_direction();
+            assert!((result.magnitude() - 1.0).abs() < 1e-2);
+            assert!(result * Vector3 (1.0, 0.0, 0.0) > 0.0);
+        }
     }
 }

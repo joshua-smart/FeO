@@ -25,22 +25,26 @@ fn main() {
     let materials: Vec<Box<dyn Material>> = vec![m_red, m_white, m_green, m_light];
 
     let render_objects: Vec<Box<dyn RenderObject>> = vec![
-        S::Plane::new(Vector3 (0.0, 0.0, 0.0), Vector3 (0.0, 0.0, 1.0), 1),
-        S::Sphere::new(Vector3 (0.0, 8.0, 1.0), 1.0, 0),
-        S::YZRect::new(7.0, 0.0, 9.0, 2.0, -3.0, 3)
+        S::XYRect::new(0.0, 0.0, 555.0, 555.0, 0.0, 1),
+//        S::XYRect::new(0.0, 0.0, 555.0, 555.0, 555.0, 1),
+//        S::XZRect::new(0.0, 0.0, 555.0, 555.0, 555.0, 1),
+//        S::YZRect::new(0.0, 0.0, 555.0, 555.0, 0.0, 2),
+//        S::YZRect::new(0.0, 0.0, 555.0, 555.0, 555.0, 0),
+        S::XYRect::new(213.0, 227.0, 343.0, 332.0, 540.0, 3),
+//        S::Sphere::new(Vector3 (278.0, 278.0, 100.0), 100.0, 0)
     ];
 
 
-    let scene = Scene::new(render_objects, materials, Color(0.0, 0.0, 0.0, 1.0), 3);
+    let scene = Scene::new(render_objects, materials, vec![S::XYRect::new(213.0, 227.0, 343.0, 332.0, 540.0, 3)], Color(0.5, 0.5, 0.5, 1.0), 1);
 
     let transform = Matrix4x4::create_frame_transform(
-        Vector3(0.0, 0.0, 1.0),
+        Vector3(278.0, -800.0, 278.0),
         Vector3(1.0, 0.0, 0.0),
         Vector3(0.0, 1.0, 0.0),
     );
-    let camera = PerspectiveCamera::new(transform, 70.0 * PI / 180.0, 0.0, 8.0);
+    let camera = PerspectiveCamera::new(transform, 40.0 * PI / 180.0, 0.0, 8.0);
 
     let renderer = Renderer::new(scene, camera);
-    let image = renderer.render(1920, 1080);
+    let image = renderer.render(600, 600);
     image.save("output.bmp");
 }

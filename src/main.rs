@@ -6,17 +6,17 @@ use fe_o::materials as M;
 use fe_o::maths::Matrix4x4;
 use fe_o::maths::Vector3;
 use fe_o::shapes as S;
-use fe_o::textures as T;
+use fe_o::textures::*;
 use fe_o::traits::Material;
 use fe_o::traits::RenderObject;
 use fe_o::Renderer;
 
 fn main() {
     
-    let t_red = T::Constant::new(Color (0.65, 0.05, 0.05, 1.0));
-    let t_white = T::Constant::new(Color (0.73, 0.73, 0.73, 1.0));
-    let t_green = T::Constant::new(Color (0.12, 0.45, 0.15, 1.0));
-    let t_light = T::Constant::new(Color (1.0, 1.0, 1.0, 1.0));
+    let t_red = ConstantTexture::new(Color (0.65, 0.05, 0.05, 1.0));
+    let t_white = ConstantTexture::new(Color (0.73, 0.73, 0.73, 1.0));
+    let t_green = ConstantTexture::new(Color (0.12, 0.45, 0.15, 1.0));
+    let t_light = ConstantTexture::new(Color (1.0, 1.0, 1.0, 1.0));
 
     let m_red = M::Lambertian::new(t_red, 0.0);
     let m_white = M::Lambertian::new(t_white, 0.0);
@@ -31,7 +31,7 @@ fn main() {
 //        S::YZRect::new(0.0, 0.0, 555.0, 555.0, 0.0, 2),
 //        S::YZRect::new(0.0, 0.0, 555.0, 555.0, 555.0, 0),
         S::XYRect::new(213.0, 227.0, 343.0, 332.0, 540.0, 3),
-//        S::Sphere::new(Vector3 (278.0, 278.0, 100.0), 100.0, 0)
+        S::Sphere::new(Vector3 (278.0, 278.0, 100.0), 100.0, 0)
     ];
 
 
